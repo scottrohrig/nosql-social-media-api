@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media API | Users</title>
+</head>
+<body>
+  <header>
+    <h1>Users</h1>
+    <nav>
+      <ul style='list-style: none;'>
+        <li><a href='http://localhost:3001/' >Home</a> ← Not Working if 'target' is 'blank'</li>
+        <li><a href="javascript:history.back()">Go Back</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div>
+      <h2>API Requests</h2>
+      <ul id='results' style='list-style: none;'>
+      </ul>
+    </div>
+    <button id='usersBtn'>GET USERS</button>
+  </main>
+
+  <script>
+
+    const printId = (reqType, id) => { return `
+    <a href='http://localhost:3001/api/${reqType}/${id}'>${id}</a>
+    `}
+
+    document.getElementById('usersBtn').addEventListener('click', async function(e) {
+      const resultsEl = document.getElementById('results')
+      resultsEl.innerHTML = '';
+      const response = await fetch('/api/users')
+      const data = await response.json()
+      console.log(data)
+      data.forEach(datum => {
+        datum = JSON.stringify(datum)
+        const liEl = document.createElement('li')
+        liEl.innerHTML = `${printId('users',JSON.parse(datum)._id)} ${datum}`
+        resultsEl.appendChild(liEl)
+      })
+  })
+
+  </script>
+
+</body>
+</html>
