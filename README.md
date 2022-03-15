@@ -32,6 +32,10 @@ Start the server
 
     npm start
 
+Import Insomnia routes using this file
+
+    ./assets/Insomnia_2022-03-15.json
+
 ## License
 [^](#index)
 
