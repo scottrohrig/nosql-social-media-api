@@ -5,21 +5,21 @@ const thoughtController = {
     Thought.find()
       .select( '-__v' )
       .sort( { _id: -1 } )
-      .then( d => res.status( 200 ).json( d ) )
-      .catch( e => res.status( 500 ).json( e ) );
+      .then( dbThoughtData => res.status( 200 ).json( dbThoughtData ) )
+      .catch( err => res.status( 500 ).json( err ) );
   },
   getThoughtById( { params }, res ) {
     Thought
       .findById( params.id )
       .select( '-__v' )
-      .then( d => {
-        if ( !d ) {
+      .then( dbThoughtData => {
+        if ( !dbThoughtData ) {
           res.status( 404 ).json( { message: 'not found' } );
           return;
         }
-        res.status( 200 ).json( d );
+        res.status( 200 ).json( dbThoughtData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
   },
   createThought( { body }, res ) {
     Thought.create( body )
@@ -33,14 +33,14 @@ const thoughtController = {
           }
         );
       } )
-      .then( d => {
-        if ( !d ) {
+      .then( dbUserData => {
+        if ( !dbUserData ) {
           res.status( 404 ).json( { message: 'not found' } );
           return;
         }
-        res.json( d );
+        res.json( dbUserData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
   },
   updateThought( { params, body }, res ) {
     Thought.findOneAndUpdate(
@@ -51,19 +51,19 @@ const thoughtController = {
         runValidators: true
       }
     )
-      .then( d => res.status( 200 ).json( d ) )
-      .catch( e => res.status( 500 ).json( e ) );
+      .then( dbThoughtData => res.status( 200 ).json( dbThoughtData ) )
+      .catch( err => res.status( 500 ).json( err ) );
   },
   deleteThought( { params }, res ) {
     Thought.findOneAndDelete( { _id: params.id } )
-      .then( d => {
-        if ( !d ) {
+      .then( dbThoughtData => {
+        if ( !dbThoughtData ) {
           res.status( 404 ).json( { message: 'no thought found' } );
           return;
         }
-        res.status( 200 ).json( d );
+        res.status( 200 ).json( dbThoughtData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
   },
 
   addReaction( { params, body }, res ) {
@@ -75,14 +75,14 @@ const thoughtController = {
         runValidators: true
       }
     )
-      .then( d => {
-        if ( !d ) {
+      .then( dbThoughtData => {
+        if ( !dbThoughtData ) {
           res.status( 404 ).json( { message: 'not found' } );
           return;
         }
-        res.json( d );
+        res.json( dbThoughtData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
 
   },
   removeReaction( { params }, res ) {
@@ -91,14 +91,14 @@ const thoughtController = {
       { $pull: { reactions: { reactionId: params.reactionId } } },
       { new: true },
     )
-      .then( d => {
-        if ( !d ) {
+      .then( dbThoughtData => {
+        if ( !dbThoughtData ) {
           res.status( 404 ).json( { message: 'not found' } );
           return;
         }
-        res.json( d );
+        res.json( dbThoughtData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
   },
 };
 
