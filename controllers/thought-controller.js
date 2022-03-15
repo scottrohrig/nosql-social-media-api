@@ -1,7 +1,7 @@
 const { Thought, User } = require( '../models' );
 
 const thoughtController = {
-  getAllThoughts( req, res ) {
+  getAllThoughts( _req, res ) {
     Thought.find()
       .select( '-__v' )
       .sort( { _id: -1 } )
