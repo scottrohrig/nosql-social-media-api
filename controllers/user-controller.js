@@ -1,6 +1,7 @@
-const { User } = require( '../models' );
+const { User, Thought } = require( '../models' );
 
 const userController = {
+
   getAllUsers( req, res ) {
     User.find()
       .populate( {
@@ -12,9 +13,10 @@ const userController = {
         select: '-__v'
       } )
       .select( '-__v' )
-      .then( d => res.json( d ) )
-      .catch( e => res.status( 500 ).json( e ) );
+      .then( dbUserData => res.json( dbUserData ) )
+      .catch( err => res.status( 500 ).json( err ) );
   },
+
   getUserById( { params }, res ) {
     User.findOne( { _id: params.id } )
       .populate( {
@@ -26,20 +28,22 @@ const userController = {
         select: '-__v'
       } )
       .select( '-__v' )
-      .then( d => {
-        if ( !d ) {
+      .then( dbUserData => {
+        if ( !dbUserData ) {
           res.status( 404 ).json( { message: 'user not found' } );
           return;
         }
-        res.json( d );
+        res.json( dbUserData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
   },
+
   createUser( { body }, res ) {
     User.create( body )
-      .then( d => res.json( d ) )
-      .catch( e => res.status( 500 ).json( e ) );
+      .then( dbUserData => res.json( dbUserData ) )
+      .catch( err => res.status( 500 ).json( err ) );
   },
+
   updateUser( { params, body }, res ) {
     User.findOneAndUpdate(
       { _id: params.id },
@@ -49,20 +53,21 @@ const userController = {
         runValidators: true
       }
     )
-      .then( d => {
-        if ( !d ) {
+      .then( dbUserData => {
+        if ( !dbUserData ) {
           res.status( 404 ).json( { message: 'user not found' } );
           return;
         }
-        res.json( d );
+        res.json( dbUserData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
 
   },
+
   deleteUser( { params }, res ) {
     User.findOneAndDelete( { _id: params.id } )
-      .then( ( { email } ) => {
-        return Thought.deleteMany( { email } );
+      .then( ( { username } ) => {
+        return Thought.deleteMany( { username } );
       } )
       .then( () => {
         return User.updateMany(
@@ -74,8 +79,14 @@ const userController = {
           },
         );
       } )
-      .then( d => res.json( d ) )
-      .catch( e => res.status( 500 ).json( e ) );
+      .then( dbUserData => {
+        if ( !dbUserData ) {
+          res.status( 404 ).json( { message: 'not found' } );
+          return;
+        }
+        res.status( 200 ).json( dbUserData );
+      } )
+      .catch( err => res.status( 500 ).json( err ) );
   },
 
   // Route /api/users/:userId/friends/:friendId
@@ -100,15 +111,16 @@ const userController = {
           }
         );
       } )
-      .then( d => {
-        if ( !d ) {
+      .then( dbUserData => {
+        if ( !dbUserData ) {
           res.status( 404 ).json( { message: 'not found' } );
           return;
         }
-        res.status( 200 ).json( d );
+        res.status( 200 ).json( dbUserData );
       } )
-      .catch( e => res.status( 500 ).json( e ) );
+      .catch( err => res.status( 500 ).json( err ) );
   },
+
   removeFriend( { params }, res ) {
     User.findOneAndUpdate(
       { _id: params.userId },
@@ -127,14 +139,14 @@ const userController = {
             runValidators: true
           },
         )
-          .then( d => {
-            if ( !d ) {
+          .then( dbUserData => {
+            if ( !dbUserData ) {
               res.status( 404 ).json( { message: 'not found' } );
               return;
             }
-            res.status( 200 ).json( d );
+            res.status( 200 ).json( dbUserData );
           } )
-          .catch( e => res.status( 500 ).json( e ) );
+          .catch( err => res.status( 500 ).json( err ) );
       } );
   },
 };
