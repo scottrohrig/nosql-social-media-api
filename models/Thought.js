@@ -1,4 +1,4 @@
-const { Schema, model } = require( 'mongoose' );
+const { Schema, Types, model } = require( 'mongoose' );
 const formatDate = require( '../utils/format-date' );
 
 const ReactionSchema = new Schema(
@@ -31,7 +31,7 @@ const ReactionSchema = new Schema(
 
 const ThoughtSchema = new Schema(
   {
-    thoughText: {
+    thoughtText: {
       type: String,
       required: 'Must contain a message',
       min: [ 1, 'Type somthing!' ],
@@ -57,7 +57,7 @@ const ThoughtSchema = new Schema(
   }
 );
 
-ThoughtSchema.virtuals( 'reactionCount' ).get( function () {
+ThoughtSchema.virtual( 'reactionCount' ).get( function () {
   return this.reactions.length;
 } );
 
