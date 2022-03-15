@@ -7,5 +7,8 @@ router.get( '/', ( req, res ) => {
 router.get( '/users', ( req, res ) => {
   res.sendFile( path.join( __dirname, '../../public/users.html' ) );
 } );
+router.get( '/thoughts', ( req, res ) => {
+  res.sendFile( path.join( __dirname, '../../public/thoughts.html' ) );
+} );
 
 module.exports = router;

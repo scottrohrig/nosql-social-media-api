@@ -3,9 +3,8 @@ module.exports = ( datetime ) => {
     hourCycle: 'h12',
     month: 'short',
     day: '2-digit',
-    year: '2-digit',
+    year: 'numeric',
     hour: 'numeric',
     minute: '2-digit'
-
   } );
 };
